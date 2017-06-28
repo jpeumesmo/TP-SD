@@ -1,0 +1,18 @@
+import java.net.Socket;
+
+public class Cliente {
+	//ATRIBUTOS
+	private String ip;
+	private int porta;
+	private Socket cliente;
+	
+	public Cliente(String ip, int porta){
+		this.ip = ip;
+		this.porta = porta;
+		this.conectar();
+	}
+	
+	public void conectar(){
+		cliente = new Socket(this.ip,this.porta)
+	}
+}

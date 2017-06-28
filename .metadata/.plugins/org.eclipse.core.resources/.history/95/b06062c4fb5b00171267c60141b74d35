@@ -1,0 +1,37 @@
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+public class Cliente {
+	//ATRIBUTOS
+	private String ip;
+	private int porta;
+	private Socket cliente;
+	
+	public Cliente(String ip, int porta) throws UnknownHostException, IOException{
+		this.ip = ip;
+		this.porta = porta;
+		this.conectar();
+	}
+	
+	public void conectar() throws UnknownHostException, IOException{
+		cliente = new Socket(this.ip,this.porta);
+	}
+	
+	public boolean logar(String userName,String password){
+		ObjectOutputStream objetoEnviado = new ObjectOutputStream(cliente.getOutputStream());
+
+		try{
+		if(userName.equals("root")){
+			//CONEXAO CRIPTROGRAFADA
+			
+		}else{
+			//CONEXAO NORMAL
+				objetoEnviado.writeUTF(userName);	
+		}
+		}catch{
+			
+		}
+	}
+}
