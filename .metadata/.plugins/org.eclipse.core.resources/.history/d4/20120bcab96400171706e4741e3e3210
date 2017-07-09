@@ -11,8 +11,8 @@ public class ServidorConexao implements Runnable{
 	//ATRIBUTOS
 
 	private Socket cliente;
-	private static ServidorSenha servidorSenha = new ServidorSenha();
-	private static ServidorArquivo servidorArquivo = new ServidorArquivo();
+	private static ServidorSenha servidorSenha;
+	private static ServidorArquivo servidorArquivo;
 
 	public ServidorConexao(Socket cliente){
 		this.cliente = cliente;
@@ -32,13 +32,12 @@ public class ServidorConexao implements Runnable{
 			//DataOutputStream resposta = new DataOutputStream(cliente.getOutputStream());
 
 			//VARIAVEIS PARA RECEBER E ENVIAR ARQUIVOS
-			//byte[] buffer = new byte[4096];//buffer de 4kb
-		//	int len = 0;
+			byte[] buffer = new byte[4096];//buffer de 4kb
+			int len = 0;
 
 
 			//TESTE
 			System.out.println(cliente.getInetAddress());
-			System.out.println(objetoRecebido.readUTF());
 			System.out.println(objetoRecebido.readUTF());
 			objetoEnviado.writeBoolean(true);
 			objetoEnviado.flush();

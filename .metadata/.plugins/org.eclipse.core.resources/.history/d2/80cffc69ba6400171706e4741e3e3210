@@ -1,10 +1,7 @@
 import java.rmi.RemoteException;
 
 public class ServidorArquivo implements Arquivo{
-	
-	public ServidorArquivo(){
-		
-	}
+
 	@Override
 	public boolean mkdir() throws RemoteException {
 		// TODO Auto-generated method stub

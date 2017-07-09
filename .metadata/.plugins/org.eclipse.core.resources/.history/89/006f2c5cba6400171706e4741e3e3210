@@ -11,8 +11,8 @@ public class ServidorConexao implements Runnable{
 	//ATRIBUTOS
 
 	private Socket cliente;
-	private static ServidorSenha servidorSenha = new ServidorSenha();
-	private static ServidorArquivo servidorArquivo = new ServidorArquivo();
+	private static ServidorSenha servidorSenha;
+	private static ServidorArquivo servidorArquivo;
 
 	public ServidorConexao(Socket cliente){
 		this.cliente = cliente;

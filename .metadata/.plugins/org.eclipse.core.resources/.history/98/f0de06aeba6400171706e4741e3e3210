@@ -37,7 +37,7 @@ public class TpSD {
 				}
 			}
 			while(true){
-				System.out.println("_");
+				System.out.println("");
 				comando = in.next();
 
 

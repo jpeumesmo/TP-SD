@@ -12,7 +12,7 @@ public class ServidorConexao implements Runnable{
 
 	private Socket cliente;
 	private static ServidorSenha servidorSenha = new ServidorSenha();
-	private static ServidorArquivo servidorArquivo = new ServidorArquivo();
+	private static ServidorArquivo servidorArquivo;
 
 	public ServidorConexao(Socket cliente){
 		this.cliente = cliente;
