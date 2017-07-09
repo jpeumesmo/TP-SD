@@ -1,29 +1,34 @@
+import java.io.Console;
 import java.io.IOException;
-import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class TpSD {
 	public static void main(String[] args) throws IOException{
 		Scanner in = new Scanner(System.in);
-		
+
 		System.out.println("Digite o ip para se concetar");
 		String ip = in.nextLine();
 		System.out.println("Digite o numero da porta\n");
 		int porta = in.nextInt();
-				
+
 		String comando;		
 		String userName;
 		String password;
-		
+		Console console = System.console();
+			
 		try {
 			Cliente cliente = new Cliente(ip,porta);
 			while(true){
-				System.out.println("User");
-				userName = in.next();
-				System.out.println("Password");
-				password = in.next();
-				
+
+				console.printf("Please enter your username: ");
+				userName = console.readLine();
+
+				console.printf("Please enter your password: ");
+				char[] passwordChars = console.readPassword();
+				password = new String(passwordChars);
+				//System.out.println(password);
+
 				if(cliente.logar(userName,password)){
 					break;
 				}else{
@@ -35,15 +40,15 @@ public class TpSD {
 				System.out.println("");
 				comando = in.next();
 
-								
+
 				if(comando.equals("exit")){
-	
-					
+
+
 					in.close();
 					break;
 				}		
-		}
-		
+			}
+
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -52,5 +57,5 @@ public class TpSD {
 			e.printStackTrace();
 		}
 	}
-	
+
 }

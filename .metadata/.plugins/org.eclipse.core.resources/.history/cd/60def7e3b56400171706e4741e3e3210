@@ -1,0 +1,7 @@
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+
+public interface Senha extends Remote{
+	boolean logar() throws RemoteException;
+	boolean useradd() throws RemoteException;
+}

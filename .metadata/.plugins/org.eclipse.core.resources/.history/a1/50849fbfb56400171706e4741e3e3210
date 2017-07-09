@@ -1,0 +1,14 @@
+import java.rmi.RemoteException;
+
+public class ServidorSenha implements Senha{
+
+	
+	@Override
+	public boolean logar() throws RemoteException {
+		// TODO Auto-generated method stub
+		//TEM A ADICIONAR BD AQUI
+		
+		return false;
+	}
+
+}

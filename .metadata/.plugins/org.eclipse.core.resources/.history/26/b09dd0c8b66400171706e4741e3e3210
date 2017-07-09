@@ -1,0 +1,33 @@
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+
+public class ServidorSenha implements Senha{
+
+	private static ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
+	
+	public ServidorSenha(){
+		if (usuarios.size() == 0){
+			usuarios.add(new Usuario("root","123"));
+		}
+	}
+	@Override
+	public boolean logar(String userName,String password) throws RemoteException {
+		// TODO Auto-generated method stub
+		//TEM A ADICIONAR BD AQUI
+		
+		return false;
+	}
+
+	@Override
+	public boolean useradd(String userName, String password) throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean userdel() throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}
