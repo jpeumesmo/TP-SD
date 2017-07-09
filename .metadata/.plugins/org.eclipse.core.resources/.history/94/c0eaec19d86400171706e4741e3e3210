@@ -43,7 +43,7 @@ public class ServidorConexao implements Runnable{
 			System.out.println(userName);
 			System.out.println(password);
 			boolean answer = servidorSenha.logar(userName, password);
-			objetoEnviado.writeBoolean(answer);
+			objetoEnviado.writeBoolean(true);
 			objetoEnviado.flush();
 
 			} catch (IOException e) {

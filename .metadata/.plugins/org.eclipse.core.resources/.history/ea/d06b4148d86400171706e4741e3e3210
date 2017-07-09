@@ -8,7 +8,6 @@ public class ServidorSenha implements Senha{
 	public ServidorSenha(){
 		if (usuarios.size() == 0){
 			usuarios.add(new Usuario("root","123"));
-			usuarios.add(new Usuario("jpeumesmo","123"));
 		}
 	}
 	@Override

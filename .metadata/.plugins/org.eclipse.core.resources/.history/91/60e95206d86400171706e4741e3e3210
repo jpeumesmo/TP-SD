@@ -38,12 +38,9 @@ public class ServidorConexao implements Runnable{
 
 			//TESTE
 			System.out.println(cliente.getInetAddress());
-			String userName = objetoRecebido.readUTF();
-			String password = objetoRecebido.readUTF();
-			System.out.println(userName);
-			System.out.println(password);
-			boolean answer = servidorSenha.logar(userName, password);
-			objetoEnviado.writeBoolean(answer);
+			System.out.println(objetoRecebido.readUTF());
+			System.out.println(objetoRecebido.readUTF());
+			objetoEnviado.writeBoolean(true);
 			objetoEnviado.flush();
 
 			} catch (IOException e) {

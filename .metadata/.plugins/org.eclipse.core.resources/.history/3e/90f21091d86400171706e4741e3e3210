@@ -37,8 +37,9 @@ public class TpSD {
 				}
 			}
 			while(true){
-				System.out.print(userName+"@Goku:~$");
+				System.out.println(userName+"@Goku:~$");
 				comando = in.next();
+
 
 				if(comando.equals("exit")){
 
