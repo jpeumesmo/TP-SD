@@ -12,7 +12,8 @@ public class TpSD {
 		System.out.println("Digite o numero da porta\n");
 		int porta = in.nextInt();
 
-		String comando;		
+		String comando;	
+		String complemento;
 		String userName;
 		String password;
 		Console console = System.console();
@@ -41,11 +42,13 @@ public class TpSD {
 				comando = in.next();
 
 				if(comando.equals("exit")){
-
-
 					in.close();
+					cliente.comando(comando);
+					cliente.desconectar();
 					break;
-				}		
+				}else{
+					cliente.comando(comando);
+				}
 			}
 
 		} catch (UnknownHostException e) {

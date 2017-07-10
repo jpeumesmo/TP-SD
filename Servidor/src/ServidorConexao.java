@@ -14,12 +14,14 @@ public class ServidorConexao implements Runnable{
 	private Socket cliente;
 	//private static ServidorSenhaImple servidorSenha = new ServidorSenhaImple();
 	private static Senha servidorSenha;
-	private static ServidorArquivo servidorArquivo = new ServidorArquivo();
-
+	//private static ServidorArquivo servidorArquivo = new ServidorArquivo();
+	private static Arquivo servidorArquivo ;
+	
 	public ServidorConexao(Socket cliente){
 		this.cliente = cliente;
 		try {
 			servidorSenha = (Senha) Naming.lookup("//127.0.0.1:1099/SenhaService");
+			//servidorArquivo = (Arquivo) Naming.lookup("//127.0.0.1:1099/ArquivoService");
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -38,31 +40,51 @@ public class ServidorConexao implements Runnable{
 		//VARIAVEIS DE COMUNICACAO
 
 
-			try {
+		try {
 			//	DataInputStream tipoOperacao = new DataInputStream(cliente.getInputStream());
-			
+
 			ObjectInputStream objetoRecebido = new ObjectInputStream(cliente.getInputStream());
 			ObjectOutputStream objetoEnviado = new ObjectOutputStream(cliente.getOutputStream());
 			//DataOutputStream resposta = new DataOutputStream(cliente.getOutputStream());
 
 			//VARIAVEIS PARA RECEBER E ENVIAR ARQUIVOS
 			//byte[] buffer = new byte[4096];//buffer de 4kb
-		//	int len = 0;
+			//	int len = 0;
 
 
 			//TESTE
 			System.out.println(cliente.getInetAddress());
 			String userName = objetoRecebido.readUTF();
 			String password = objetoRecebido.readUTF();
+			System.out.println(userName);
+			System.out.println(password);
 			boolean answer = servidorSenha.logar(userName, password);
 			objetoEnviado.writeBoolean(answer);
 			objetoEnviado.flush();
 
-				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}		
+			String comando;
+			if (userName.equals("root") ){
+				while (true){
+					objetoRecebido = new ObjectInputStream(cliente.getInputStream());
+					
+					
+				}
+			}else{
+				while (true){
+					objetoRecebido = new ObjectInputStream(cliente.getInputStream());
+					comando = objetoRecebido.readUTF();
+					System.out.println(comando);
+					if (comando.equals("exit")){
+						objetoEnviado.close();
+						objetoRecebido.close();
+						this.cliente.close();
+					}
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 	}
 
 
