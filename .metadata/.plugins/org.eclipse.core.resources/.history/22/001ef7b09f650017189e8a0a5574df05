@@ -1,0 +1,18 @@
+
+public class ServidorSenha {
+
+	ServidorSenha(){
+		try
+        { 
+            Senhac = new ServidorSenhaImple(); 
+            Naming.rebind("RMI://127.0.0.1:1020/SSenhaService", c); 
+        }  
+        catch (Exception e)  
+        { 
+            e.printStackTrace(); 
+        } 
+	}
+	public static void main(String[] args)  { 
+        new ServidorSenha(); 
+    } 
+}
