@@ -74,10 +74,6 @@ public class ServidorConexao implements Runnable{
 					objetoRecebido = new ObjectInputStream(cliente.getInputStream());
 					comando = objetoRecebido.readUTF();
 					System.out.println(comando);
-					//servidorArquivo.log(userName);
-					if (comando.equals("mkdir")){
-						//servidorArquivo.mkdir();
-					}
 					if (comando.equals("exit")){
 						objetoEnviado.close();
 						objetoRecebido.close();

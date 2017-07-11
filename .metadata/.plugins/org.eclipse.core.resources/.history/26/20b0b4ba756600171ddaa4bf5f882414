@@ -2,8 +2,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface Arquivo extends Remote{
-	void log(String userName) throws RemoteException;
- 	boolean mkdir(String nome) throws RemoteException;
+	boolean mkdir(String nome) throws RemoteException;
 	boolean rmdir(String nome) throws RemoteException;
 	String ls() throws RemoteException;
 	boolean put() throws RemoteException;

@@ -18,7 +18,7 @@ public class ServidorArquivoImple implements Arquivo{
 	@Override
 	public boolean rmdir(String nome) throws RemoteException {
 		// TODO Auto-generated method stub
-		path.removeOfPath(diretorioAtual+"/"+nome);
+		
 		return false;
 	}
 

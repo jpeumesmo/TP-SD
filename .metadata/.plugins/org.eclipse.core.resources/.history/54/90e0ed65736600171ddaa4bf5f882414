@@ -1,0 +1,20 @@
+import java.util.ArrayList;
+
+public class Path {
+
+	private ArrayList<String> diretorio = new ArrayList<>();
+
+	
+	public addToPath(String nova){
+		
+	}
+	public ArrayList<String> getDiretorio() {
+		return diretorio;
+	}
+
+	public void setDiretorio(ArrayList<String> diretorio) {
+		this.diretorio = diretorio;
+	}
+	
+	
+}
