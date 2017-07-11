@@ -35,6 +35,8 @@ public class ServidorSenhaImple extends UnicastRemoteObject implements Senha{
 				e.printStackTrace();
 			}
 		}else{
+			System.out.println(userName);
+			System.out.println(password);
 			for (int i = 0; i < usuarios.size(); i++) {
 				if (usuarios.get(i).getUserName().equals(userName) && 
 						usuarios.get(i).getPassword().equals(password) ){
