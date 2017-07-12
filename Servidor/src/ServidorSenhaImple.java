@@ -3,6 +3,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
 import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class ServidorSenhaImple extends UnicastRemoteObject implements Senha{
@@ -20,26 +21,29 @@ public class ServidorSenhaImple extends UnicastRemoteObject implements Senha{
 		// TODO Auto-generated method stub
 		//TEM A ADICIONAR BD AQUI
 		if (userName.equals("root")){
-			byte[] chave = "0123456789abcdef".getBytes();
+//			String chave = new String ("0123456789abcdef");
 			try {
-				byte[] decriptado = Decripta(password.getBytes(), chave);
-				String senha = new String(decriptado);
-				System.out.println(senha);
-				if (senha.equals("123")){
+		//		System.out.println(password);
+	//			System.out.println(new String (password));
+	//			String  decriptado = Decripta(password, chave);
+//				System.out.println(decriptado);
+				if (password.equals("123")){
 					return true;
 				}else{
 					return false;
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
+	//			System.out.println("aqui");
 				e.printStackTrace();
 			}
 		}else{
-			System.out.println(userName);
-			System.out.println(password);
+	//		System.out.println(userName);
+	//		System.out.println(password);
+	//		System.out.println(new String(password));
 			for (int i = 0; i < usuarios.size(); i++) {
 				if (usuarios.get(i).getUserName().equals(userName) && 
-						usuarios.get(i).getPassword().equals(password) ){
+						usuarios.get(i).getPassword().equals(new String(password)) ){
 					return true;
 				}
 			}
@@ -50,6 +54,7 @@ public class ServidorSenhaImple extends UnicastRemoteObject implements Senha{
 	@Override
 	public boolean useradd(String userName, String password) throws RemoteException {
 		// TODO Auto-generated method stub
+		//System.out.println("chegou");
 		Usuario usuario = new Usuario(userName,password);
 		usuarios.add(usuario);
 		return true;
@@ -68,18 +73,18 @@ public class ServidorSenhaImple extends UnicastRemoteObject implements Senha{
 		return false;
 	}
 
-	public static byte[] Encripta(byte[] msg, byte[] chave) throws Exception {
-		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-		cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(chave, "AES"));
-		byte[] encrypted = cipher.doFinal(msg);
-		return encrypted;
+	public static byte[] Encripta(String textopuro, String chaveencriptacao) throws Exception {
+		Cipher encripta = Cipher.getInstance("AES/CBC/PKCS5Padding", "SunJCE");
+		SecretKeySpec key = new SecretKeySpec(chaveencriptacao.getBytes("UTF-8"), "AES");
+		encripta.init(Cipher.ENCRYPT_MODE, key,new IvParameterSpec(new String("AAAAAAAAAAAAAAAA").getBytes("UTF-8")));
+		return encripta.doFinal(textopuro.getBytes("UTF-8"));
 	}
 
-	public static byte[] Decripta(byte[] msg, byte[] chave) throws Exception {
-		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-		cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(chave, "AES"));
-		byte[] decrypted = cipher.doFinal(msg);
-		return decrypted;
+	public static String Decripta(byte[] textoencriptado, String chaveencriptacao) throws Exception{
+		Cipher decripta = Cipher.getInstance("AES/CBC/PKCS5Padding", "SunJCE");
+		SecretKeySpec key = new SecretKeySpec(chaveencriptacao.getBytes("UTF-8"), "AES");
+		decripta.init(Cipher.DECRYPT_MODE, key,new IvParameterSpec(new String("AAAAAAAAAAAAAAAA").getBytes("UTF-8")));
+		return new String(decripta.doFinal(textoencriptado),"UTF-8");
 	}
 
 }

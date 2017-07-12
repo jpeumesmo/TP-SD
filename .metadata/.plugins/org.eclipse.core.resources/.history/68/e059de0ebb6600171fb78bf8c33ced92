@@ -1,0 +1,84 @@
+import java.io.Console;
+import java.io.IOException;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class TpSD {
+	public static void main(String[] args) throws IOException{
+		Scanner in = new Scanner(System.in);
+
+		System.out.println("Digite o ip para se concetar");
+		String ip = in.nextLine();
+		System.out.println("Digite o numero da porta\n");
+		int porta = in.nextInt();
+
+		String aux;
+		String complemento;
+		String userName;
+		String password;
+		Console console = System.console();
+			
+		try {
+			Cliente cliente = new Cliente(ip,porta);
+			while(true){
+
+				console.printf("Please enter your username: ");
+				userName = console.readLine();
+
+				console.printf("Please enter your password: ");
+				char[] passwordChars = console.readPassword();
+				password = new String(passwordChars);
+				//System.out.println(password);
+
+				if(cliente.logar(userName,password)){
+					break;
+				}else{
+					System.out.println("Falha no login");
+					System.out.println("Tente de novo");
+				}
+			}
+			if (userName.equals("root")){
+				while(true){
+					System.out.print(userName+"@Goku:~$ ");
+					aux = in.next();
+					ArrayList<String> comando= new ArrayList<>();
+					
+					if(comando.equals("exit")){
+						in.close();
+						cliente.comando(comando);
+						cliente.desconectar();
+						break;
+					}else{
+						cliente.comando(comando);
+					}
+				}
+
+			}
+			
+			while(true){
+				System.out.print(userName+"@Goku:~$ ");
+				comando = in.next();
+				
+				if(comando.equals("exit")){
+					in.close();
+					cliente.comando(comando);
+					cliente.desconectar();
+					break;
+				}else if(comando.equals("useradd") || (comando.equals("userdel"))){
+					System.out.println("Comando Invalido");
+				}else{
+					cliente.comando(comando);
+				}
+			}
+
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+}

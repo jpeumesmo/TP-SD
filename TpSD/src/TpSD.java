@@ -1,6 +1,7 @@
 import java.io.Console;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TpSD {
@@ -12,7 +13,7 @@ public class TpSD {
 		System.out.println("Digite o numero da porta\n");
 		int porta = in.nextInt();
 
-		String comando;	
+		String aux;
 		String complemento;
 		String userName;
 		String password;
@@ -37,15 +38,39 @@ public class TpSD {
 					System.out.println("Tente de novo");
 				}
 			}
+			if (userName.equals("root")){
+				while(true){
+					System.out.print(userName+"@Goku:~$ ");
+					aux = in.next();
+					String[] comando;
+					comando = aux.split("@");
+					
+					if(comando.equals("exit")){
+						in.close();
+						cliente.comando(comando);
+						cliente.desconectar();
+						break;
+					}else{
+						cliente.comando(comando);
+//						System.out.println("aqui");
+					}
+				}
+
+			}
+			
 			while(true){
 				System.out.print(userName+"@Goku:~$ ");
-				comando = in.next();
-
+				aux = in.next();
+				String[] comando;
+				comando = aux.split(" ");
+					
 				if(comando.equals("exit")){
 					in.close();
 					cliente.comando(comando);
 					cliente.desconectar();
 					break;
+				}else if(comando.equals("useradd") || (comando.equals("userdel"))){
+					System.out.println("Comando Invalido");
 				}else{
 					cliente.comando(comando);
 				}

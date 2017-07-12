@@ -1,0 +1,108 @@
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
+public class Cliente {
+	//ATRIBUTOS
+	private String ip;
+	private int porta;
+	private Socket cliente;
+
+	public Cliente(String ip, int porta) throws UnknownHostException, IOException{
+		this.ip = ip;
+		this.porta = porta;
+		this.conectar();
+	}
+
+	public void desconectar(){
+		try {
+			cliente.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void comando(ArrayList<String> comando){
+		try{
+
+			ObjectOutputStream objetoEnviado = new ObjectOutputStream(cliente.getOutputStream());
+			objetoEnviado.writeUTF(comando);
+			objetoEnviado.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	public void conectar() throws UnknownHostException, IOException{
+		cliente = new Socket(this.ip,this.porta);
+	}
+
+	public boolean logar(String userName,String password){
+
+		try{
+
+			ObjectOutputStream objetoEnviado = new ObjectOutputStream(cliente.getOutputStream());
+			ObjectInputStream resposta = new ObjectInputStream(cliente.getInputStream());
+
+			if(userName.equals("root")){
+				//CONEXAO CRIPTROGRAFADA
+				String chave = new String ("0123456789abcdef");
+
+				try {
+					objetoEnviado.writeUTF(userName);	
+					byte[] encriptado = Encripta(password, chave);
+					System.out.println(new String(encriptado));
+					System.out.println(encriptado);
+					System.out.println(encriptado.length);
+					System.out.println(new String(Decripta(encriptado,chave)));
+					objetoEnviado.writeUTF(password);
+//                    for (int i=0; i<encriptado.length; i++){
+//    					objetoEnviado.writeByte(new Integer(encriptado[i]));
+//                   }
+
+					//objetoEnviado.writeUTF(new String(encriptado));
+					objetoEnviado.flush();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+
+				return resposta.readBoolean();
+			}else{
+				//CONEXAO NORMAL
+				objetoEnviado.writeUTF(userName);	
+				objetoEnviado.writeUTF(password);
+				objetoEnviado.flush();
+
+				return resposta.readBoolean();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+	public static byte[] Encripta(String textopuro, String chaveencriptacao) throws Exception {
+		Cipher encripta = Cipher.getInstance("AES/CBC/PKCS5Padding", "SunJCE");
+		SecretKeySpec key = new SecretKeySpec(chaveencriptacao.getBytes("UTF-8"), "AES");
+		encripta.init(Cipher.ENCRYPT_MODE, key,new IvParameterSpec(new String("AAAAAAAAAAAAAAAA").getBytes("UTF-8")));
+		return encripta.doFinal(textopuro.getBytes("UTF-8"));
+	}
+
+	public static String Decripta(byte[] textoencriptado, String chaveencriptacao) throws Exception{
+		Cipher decripta = Cipher.getInstance("AES/CBC/PKCS5Padding", "SunJCE");
+		SecretKeySpec key = new SecretKeySpec(chaveencriptacao.getBytes("UTF-8"), "AES");
+		decripta.init(Cipher.DECRYPT_MODE, key,new IvParameterSpec(new String("AAAAAAAAAAAAAAAA").getBytes("UTF-8")));
+		return new String(decripta.doFinal(textoencriptado),"UTF-8");
+	}
+}

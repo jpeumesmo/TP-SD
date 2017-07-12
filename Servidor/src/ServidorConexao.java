@@ -55,9 +55,14 @@ public class ServidorConexao implements Runnable{
 			//TESTE
 			System.out.println(cliente.getInetAddress());
 			String userName = objetoRecebido.readUTF();
+			
+//			byte [] password = null;
+// 			objetoRecebido.readFully(password);
+			///objetoRecebido.read(password);
+//			objetoRecebido.read(password, 0, 16);
 			String password = objetoRecebido.readUTF();
-			System.out.println(userName);
-			System.out.println(password);
+	//		System.out.println(password);
+	//		System.out.println(new String(password));
 			boolean answer = servidorSenha.logar(userName, password);
 			objetoEnviado.writeBoolean(answer);
 			objetoEnviado.flush();
@@ -66,7 +71,33 @@ public class ServidorConexao implements Runnable{
 			if (userName.equals("root") ){
 				while (true){
 					objetoRecebido = new ObjectInputStream(cliente.getInputStream());
-					
+					comando = objetoRecebido.readUTF();
+					//System.out.println(comando);
+					//servidorArquivo.log(userName);
+					if (comando.equals("mkdir")){
+						//servidorArquivo.mkdir();
+					}else if(comando.equals("rmdir")){
+						
+					}else if (comando.equals("exit")){
+						objetoEnviado.close();
+						objetoRecebido.close();
+						this.cliente.close();
+					}else if (comando.equals("cd")){
+						
+					}else if(comando.equals("ls")){
+						
+					}else if (comando.equals("useradd")){
+						String userAddName = objetoRecebido.readUTF();
+						String addPassword = objetoRecebido.readUTF();
+						System.out.println(userAddName);
+						System.out.println(addPassword);
+						boolean ok = servidorSenha.useradd(userAddName, addPassword);
+					}else if (comando.equals("userdel")){
+						String userDelName = objetoRecebido.readUTF();
+						boolean ok = servidorSenha.userdel(userDelName);
+					}else{
+						continue;
+					}
 					
 				}
 			}else{
@@ -77,12 +108,19 @@ public class ServidorConexao implements Runnable{
 					//servidorArquivo.log(userName);
 					if (comando.equals("mkdir")){
 						//servidorArquivo.mkdir();
-					}
-					if (comando.equals("exit")){
+					}else if(comando.equals("rmdir")){
+						
+					}else if (comando.equals("exit")){
 						objetoEnviado.close();
 						objetoRecebido.close();
 						this.cliente.close();
-					}
+					}else if (comando.equals("cd")){
+						
+					}else if(comando.equals("ls")){
+						
+					}else{
+						continue;
+					}	
 				}
 			}
 		} catch (IOException e) {

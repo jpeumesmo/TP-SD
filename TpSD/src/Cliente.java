@@ -3,8 +3,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class Cliente {
@@ -18,7 +20,7 @@ public class Cliente {
 		this.porta = porta;
 		this.conectar();
 	}
-	
+
 	public void desconectar(){
 		try {
 			cliente.close();
@@ -28,11 +30,15 @@ public class Cliente {
 		}
 	}
 
-	public void comando(String comando){
+	public void comando(String[] comando){
 		try{
 
 			ObjectOutputStream objetoEnviado = new ObjectOutputStream(cliente.getOutputStream());
-			objetoEnviado.writeUTF(comando);
+		//	System.out.println(comando.length);
+			for (int i=0; i< comando.length; i++){
+				objetoEnviado.writeUTF(comando[i]);
+				//System.out.println(comando[i]);
+			}
 			objetoEnviado.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -45,35 +51,43 @@ public class Cliente {
 	}
 
 	public boolean logar(String userName,String password){
-		
+
 		try{
 
 			ObjectOutputStream objetoEnviado = new ObjectOutputStream(cliente.getOutputStream());
 			ObjectInputStream resposta = new ObjectInputStream(cliente.getInputStream());
-			
+
 			if(userName.equals("root")){
 				//CONEXAO CRIPTROGRAFADA
-				byte[] mensagem = password.getBytes();
-			    byte[] chave = "0123456789abcdef".getBytes();
-			    
-			    try {
-			    	objetoEnviado.writeUTF(userName);	
-					byte[] encriptado = Encripta(mensagem, chave);
-					objetoEnviado.writeUTF(new String(encriptado));
+				String chave = new String ("0123456789abcdef");
+
+				try {
+					objetoEnviado.writeUTF(userName);	
+					byte[] encriptado = Encripta(password, chave);
+//					System.out.println(new String(encriptado));
+//					System.out.println(encriptado);
+//					System.out.println(encriptado.length);
+//					System.out.println(new String(Decripta(encriptado,chave)));
+					objetoEnviado.writeUTF(password);
+//                    for (int i=0; i<encriptado.length; i++){
+//    					objetoEnviado.writeByte(new Integer(encriptado[i]));
+//                   }
+
+					//objetoEnviado.writeUTF(new String(encriptado));
 					objetoEnviado.flush();
-			    } catch (Exception e) {
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-				
+
+
 				return resposta.readBoolean();
 			}else{
 				//CONEXAO NORMAL
 				objetoEnviado.writeUTF(userName);	
 				objetoEnviado.writeUTF(password);
 				objetoEnviado.flush();
-				
+
 				return resposta.readBoolean();
 			}
 		} catch (IOException e) {
@@ -82,17 +96,17 @@ public class Cliente {
 			return false;
 		}
 	}
-	public static byte[] Encripta(byte[] msg, byte[] chave) throws Exception {
-	    Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-	    cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(chave, "AES"));
-	    byte[] encrypted = cipher.doFinal(msg);
-	    return encrypted;
+	public static byte[] Encripta(String textopuro, String chaveencriptacao) throws Exception {
+		Cipher encripta = Cipher.getInstance("AES/CBC/PKCS5Padding", "SunJCE");
+		SecretKeySpec key = new SecretKeySpec(chaveencriptacao.getBytes("UTF-8"), "AES");
+		encripta.init(Cipher.ENCRYPT_MODE, key,new IvParameterSpec(new String("AAAAAAAAAAAAAAAA").getBytes("UTF-8")));
+		return encripta.doFinal(textopuro.getBytes("UTF-8"));
 	}
 
-	public static byte[] Decripta(byte[] msg, byte[] chave) throws Exception {
-	    Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-	    cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(chave, "AES"));
-	    byte[] decrypted = cipher.doFinal(msg);
-	    return decrypted;
+	public static String Decripta(byte[] textoencriptado, String chaveencriptacao) throws Exception{
+		Cipher decripta = Cipher.getInstance("AES/CBC/PKCS5Padding", "SunJCE");
+		SecretKeySpec key = new SecretKeySpec(chaveencriptacao.getBytes("UTF-8"), "AES");
+		decripta.init(Cipher.DECRYPT_MODE, key,new IvParameterSpec(new String("AAAAAAAAAAAAAAAA").getBytes("UTF-8")));
+		return new String(decripta.doFinal(textoencriptado),"UTF-8");
 	}
 }
